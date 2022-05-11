@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createAppointmentController = exports.createAppointmentUseCase = void 0;
+const PostgresAppointmentRepository_1 = require("../../../repositories/implementations/AppointmentImplementations/PostgresAppointmentRepository");
+const CreateAppointmentUseCase_1 = require("./CreateAppointmentUseCase");
+const CreateAppointmentController_1 = require("./CreateAppointmentController");
+const postgresAppointmentRepository = new PostgresAppointmentRepository_1.PostgresAppointmentRepository();
+const createAppointmentUseCase = new CreateAppointmentUseCase_1.CreateAppointmentUseCase(postgresAppointmentRepository);
+exports.createAppointmentUseCase = createAppointmentUseCase;
+const createAppointmentController = new CreateAppointmentController_1.CreateAppointmentController(createAppointmentUseCase);
+exports.createAppointmentController = createAppointmentController;

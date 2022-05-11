@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createEmployeeController = exports.createEmployeeUseCase = void 0;
+const PostgresEmployeeRepository_1 = require("../../../repositories/implementations/EmployeeImplementations/PostgresEmployeeRepository");
+const PostgresUsersRepository_1 = require("../../../repositories/implementations/UserImplementations/PostgresUsersRepository");
+const CreateEmployeeUseCase_1 = require("./CreateEmployeeUseCase");
+const CreateEmployeeController_1 = require("./CreateEmployeeController");
+const postgresCompaniesRepository = new PostgresEmployeeRepository_1.PostgresCompaniesRepository();
+const postgresUsersRepository = new PostgresUsersRepository_1.PostgresUsersRepository();
+const createEmployeeUseCase = new CreateEmployeeUseCase_1.CreateEmployeeUseCase(postgresUsersRepository, postgresCompaniesRepository);
+exports.createEmployeeUseCase = createEmployeeUseCase;
+const createEmployeeController = new CreateEmployeeController_1.CreateEmployeeController(createEmployeeUseCase);
+exports.createEmployeeController = createEmployeeController;

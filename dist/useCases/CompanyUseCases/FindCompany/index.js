@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.findCompanyController = exports.findCompanyUseCase = void 0;
+const PostgresCompaniesRepository_1 = require("../../../repositories/implementations/CompanyImplementations/PostgresCompaniesRepository");
+const FindCompanyUseCase_1 = require("./FindCompanyUseCase");
+const FindCompanyController_1 = require("./FindCompanyController");
+const postgresCompaniesRepository = new PostgresCompaniesRepository_1.PostgresCompaniesRepository();
+const findCompanyUseCase = new FindCompanyUseCase_1.FindCompanyUseCase(postgresCompaniesRepository);
+exports.findCompanyUseCase = findCompanyUseCase;
+const findCompanyController = new FindCompanyController_1.FindCompanyController(findCompanyUseCase);
+exports.findCompanyController = findCompanyController;

@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.setUserPermissionController = exports.setUserPermissionUseCase = void 0;
+const PostgresUsersRepository_1 = require("../../../repositories/implementations/UserImplementations/PostgresUsersRepository");
+const SetUserPermissionUseCase_1 = require("./SetUserPermissionUseCase");
+const SetUserPermissionController_1 = require("./SetUserPermissionController");
+const postgresUsersRepository = new PostgresUsersRepository_1.PostgresUsersRepository();
+const setUserPermissionUseCase = new SetUserPermissionUseCase_1.SetUserPermissionUseCase(postgresUsersRepository);
+exports.setUserPermissionUseCase = setUserPermissionUseCase;
+const setUserPermissionController = new SetUserPermissionController_1.SetUserPermissionController(setUserPermissionUseCase);
+exports.setUserPermissionController = setUserPermissionController;
