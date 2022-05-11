@@ -1,5 +1,5 @@
 import { User } from '@prisma/client';
-import { PermissionsEntity } from './Permissions'
+import { PermissionsEntity } from './Permissions';
 export class UserEntity implements User{
   public id: number
   public companyId: number
@@ -10,8 +10,9 @@ export class UserEntity implements User{
   public Avatar: string;
   public permissionsID: number;
   public employeeId: number;
+  public permissions?: PermissionsEntity
 
-  constructor(props: Omit<UserEntity,'id'|'createdAt'|'updatedAt'>) {
+  constructor(props: Omit<UserEntity,'id'|'createdAt'|'updatedAt' |'permissions'>) {
     Object.assign(this,props);    
   }
   faceId: string;

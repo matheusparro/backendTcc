@@ -69,6 +69,7 @@ export class PostgresUsersRepository implements IUsersRepository {
       },
       
     })
+    
     return user;
   }
 

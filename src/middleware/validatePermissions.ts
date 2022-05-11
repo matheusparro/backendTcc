@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import  { decode,verify } from 'jsonwebtoken'
 import { IUsersRepository } from "../repositories/implementations/UserImplementations/IUsersRepository";
 import { PostgresUsersRepository } from "../repositories/implementations/UserImplementations/PostgresUsersRepository";
 export function is(rolesRoutes: string[]) {
