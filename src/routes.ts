@@ -28,7 +28,6 @@ router.post('/teste', multer(uploadAvatar.getConfig).single("userAvatar"), (req,
       response: req.file,
     });
   }
-
   //Caso não seja um arquivo validado, retornamos o status 409
   //Doc para o status: https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status/409
   res.status(409);
