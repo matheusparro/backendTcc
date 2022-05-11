@@ -3,9 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostgresUsersRepository = void 0;
 const client_1 = require("@prisma/client");
 const client_2 = require("../../../prisma/client");
+const axios_1 = require("axios");
 class PostgresUsersRepository {
-    constructor(prisma = new client_1.PrismaClient()) {
+    constructor(prisma = new client_1.PrismaClient(), axios = new axios_1.Axios()) {
         this.prisma = prisma;
+        this.axios = axios;
     }
     // async setUserDepartment(id: number, departmentId: number, companyId: number): Promise<UserEntity> {
     //   const departmentFounded = await client.department.findFirst({
@@ -67,10 +69,24 @@ class PostgresUsersRepository {
         return user;
     }
     async save(user) {
+        const data = null;
         try {
             const userCreated = await this.prisma.user.create({
-                data: user
+                data: {
+                    email: user.email,
+                    password: user.password,
+                    Avatar: user.Avatar,
+                    companyId: user.companyId,
+                    employeeId: user.employeeId,
+                    faceId: user.faceId,
+                    permissionsID: user.permissionsID
+                }
             });
+            // const headers = {
+            //   'Content-Type': 'application/json',
+            //   'Ocp-Apim-Subscription-Key': '74893f4645c94faebe27e75c94899910'
+            // }
+            // await this.axios.post("https://faceapitcc.cognitiveservices.azure.com/",data,{headers})
             return userCreated;
         }
         catch (error) {
