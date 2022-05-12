@@ -87,7 +87,7 @@ export class PostgresUsersRepository implements IUsersRepository {
           'Ocp-Apim-Subscription-Key': '74893f4645c94faebe27e75c94899910'
         }
   
-         result = await this.axios.post("https://faceapitcc.cognitiveservices.azure.com/",data,{headers})
+         result = await this.axios.post("MINHAURL/",data,{headers})
       
       } 
       let faceId = null
