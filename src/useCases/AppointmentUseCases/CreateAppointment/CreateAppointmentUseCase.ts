@@ -8,9 +8,9 @@ export class CreateAppointmentUseCase {
     private appointmentRepository: IAppointmentRepository
   ) {}
 
-  async execute(data: AppointmentEntity) {
+  async execute(data: AppointmentEntity,faceToAnalize:Express.Multer.File) {
 
-    const appointmentCreated = await this.appointmentRepository.save(data);
+    const appointmentCreated = await this.appointmentRepository.save(data,faceToAnalize);
 
     if (!appointmentCreated){
       throw new Error('Appointment not created.');

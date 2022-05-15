@@ -17,10 +17,11 @@ import { uploadAvatar } from "./middleware/userAvatar"
 import { findCompanyController } from "./useCases/CompanyUseCases/FindCompany";
 import { is } from "./middleware/validatePermissions";
 import { deleteUserController } from "./useCases/UserUseCases/DeleteUser";
+import { createAppointmentController } from "./useCases/AppointmentUseCases/CreateAppointment";
 
 const router = Router()
 
-router.post('/teste', multer(uploadAvatar.getConfig).single("userAvatar"), (req, res) => {
+router.post('/teste', multer().single("testeImagem"), (req, res) => {
   if (req.file) {
     //Se ele existir, retornamos um sucess com o payload do arquivo gerado
     //Aqui sua criatividade é o limite
@@ -86,6 +87,11 @@ router.post('/employee', (request, response) => {
 
 router.post('/appointment-configuration', (request, response) => {
   return createAppointmentConfigurationController.handle(request, response);
+});
+
+router.post('/appointment',multer().single("faceToAnalize"), (request, response) => {
+  
+  return createAppointmentController.handle(request, response);
 });
 
 export { router }

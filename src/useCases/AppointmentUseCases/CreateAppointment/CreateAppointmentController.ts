@@ -9,16 +9,16 @@ export class CreateAppointmentController {
 
   async handle(request: Request, response: Response): Promise<Response> {
    
-    const {departmentId,
+    const {
     employeeId,
     appointmentTime} = request.body
+    const faceToAnalize = request.file
     try {
       const appointmentCreated = new AppointmentEntity({
-       departmentId,
-       employeeId,
+       employeeId:parseInt(employeeId),
        appointmentTime:new Date(appointmentTime),
       })
-      await this.createAppointmentUseCase.execute(appointmentCreated)
+      await this.createAppointmentUseCase.execute(appointmentCreated,faceToAnalize)
   
       return response.status(201).send();  
     } catch (err) {

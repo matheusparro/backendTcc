@@ -15,7 +15,6 @@ export class UserEntity implements User{
   constructor(props: Omit<UserEntity,'id'|'createdAt'|'updatedAt' |'permissions'>) {
     Object.assign(this,props);    
   }
-  faceId: string;
 
   
 }

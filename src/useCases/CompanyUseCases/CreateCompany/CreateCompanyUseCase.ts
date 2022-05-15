@@ -22,7 +22,6 @@ export class CreateCompanyUseCase {
       Avatar:null,
       permissionsID:null,
       employeeId:null,
-      faceId:null,
     }) 
     const companyCreated = await this.companyRepository.save(newCompany,newUser)
     if (!companyCreated){

@@ -77,21 +77,9 @@ export class PostgresUsersRepository implements IUsersRepository {
   }
 
   async save(user: UserEntity): Promise<UserEntity> {
-    const caminho = user.Avatar.split("\\",2)[1]
-    const data = `https://tcctotrabalhando.herokuapp.com/${caminho}`
+ 
      try {
-      let result = null
-      if(user.Avatar){
-        const headers = {
-          'Content-Type': 'application/json',
-          'Ocp-Apim-Subscription-Key': '74893f4645c94faebe27e75c94899910'
-        }
-  
-         result = await this.axios.post("MINHAURL/",data,{headers})
-      
-      } 
-      let faceId = null
-      if(result) faceId = result.data[0].faceId
+     
       const userCreated= await this.prisma.user.create({
         data:{
           email:user.email,
@@ -99,7 +87,7 @@ export class PostgresUsersRepository implements IUsersRepository {
           Avatar:user.Avatar,
           companyId:user.companyId,
           employeeId:user.employeeId,
-          faceId:faceId,
+       
           permissionsID:user.permissionsID
         }
       })

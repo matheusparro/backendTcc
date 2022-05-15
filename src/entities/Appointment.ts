@@ -7,7 +7,6 @@ export class AppointmentEntity implements Appointment{
   }
   appointmentTime: Date;
     id: number;
-    departmentId: number;
     employeeId: number;
     createdAt: Date;
     updatedAt: Date;

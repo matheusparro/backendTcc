@@ -19,7 +19,6 @@ model User {
   id      Int      @id @default(autoincrement())
   email   String   @unique
   password String
-  faceId String? @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Avatar String?
@@ -68,7 +67,6 @@ model Department {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   employer Employee[]
-  appointment Appointment[]
 }
 
 model RefreshToken {
@@ -106,8 +104,6 @@ model AppointmentConfiguration {
 model Appointment {
   id Int      @id @default(autoincrement())
   appointmentTime  DateTime
-  department   Department?    @relation(fields: [departmentId], references: [id])
-  departmentId Int?
   employee Employee?  @relation(fields: [employeeId], references: [id])
   employeeId Int?
   createdAt DateTime @default(now())
