@@ -18,6 +18,7 @@ import { findCompanyController } from "./useCases/CompanyUseCases/FindCompany";
 import { is } from "./middleware/validatePermissions";
 import { deleteUserController } from "./useCases/UserUseCases/DeleteUser";
 import { createAppointmentController } from "./useCases/AppointmentUseCases/CreateAppointment";
+import { findAllDepartmentController } from "./useCases/DepartmentUseCases/FindAllDepartment.ts";
 
 const router = Router()
 
@@ -92,6 +93,11 @@ router.post('/appointment-configuration', (request, response) => {
 router.post('/appointment',multer().single("faceToAnalize"), (request, response) => {
   
   return createAppointmentController.handle(request, response);
+});
+
+router.get('/department/all', (request, response) => {
+  
+  return findAllDepartmentController.handle(request, response);
 });
 
 export { router }

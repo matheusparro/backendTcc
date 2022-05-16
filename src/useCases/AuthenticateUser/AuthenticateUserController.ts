@@ -10,11 +10,11 @@ export class AuthenticateUserController {
     const {  email, password } = request.body;
 
     try {
-      const {token,refreshToken} = await this.authenticateUserUseCase.execute({
+      const {token,refreshToken, userFind} = await this.authenticateUserUseCase.execute({
         email, password
       })
   
-      return response.status(201).json({token,refreshToken});  
+      return response.status(201).json({token,refreshToken,userFind});  
     } catch (err) {
       return response.status(400).json({
         message: err.message || 'Unexpected error.'

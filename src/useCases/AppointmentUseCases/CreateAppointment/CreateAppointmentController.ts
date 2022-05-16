@@ -18,9 +18,8 @@ export class CreateAppointmentController {
        employeeId:parseInt(employeeId),
        appointmentTime:new Date(appointmentTime),
       })
-      await this.createAppointmentUseCase.execute(appointmentCreated,faceToAnalize)
-  
-      return response.status(201).send();  
+      const appointment = await this.createAppointmentUseCase.execute(appointmentCreated,faceToAnalize)
+      return response.status(201).send(appointment);  
     } catch (err) {
       return response.status(400).json({
         message: err.message || 'Unexpected error.'

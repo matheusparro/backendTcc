@@ -1,8 +1,10 @@
 import { IAppointmentRepository } from "./IAppointmentRepository";
 import { PrismaClient } from "@prisma/client";
 import { AppointmentEntity } from "../../../entities/Appointment";
-import fs from 'fs'
+import fs from 'fs';
 import path from "path";
+import axios from 'axios'
+import  FormData  from 'form-data'
 export class PostgresAppointmentRepository implements IAppointmentRepository {
   constructor(
     private prisma = new PrismaClient(),
@@ -20,17 +22,36 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
       
       if(!userFoundByEmployee){
         throw new Error("Employee user not found")
-      }
-      const directoryPath = path.join('../../../../', userFoundByEmployee.user.Avatar);
-      const teste = fs.readFile(directoryPath,(item)=> {
-        return item
-      })
-      const appointmentConfigurationCreated = await this.prisma.appointment.create({
-        data:appointmentEntity
-      })
-      return appointmentConfigurationCreated
+      } 
+
+        const image = path.join(__dirname, `../../../../${userFoundByEmployee.user.Avatar}`)
+        const fileFounded = fs.createReadStream(image)
+        const formdata = new FormData()
+        const formatedFounded = userFoundByEmployee.user.Avatar.split("\\")[1]
+        formdata.append('file', fileFounded, formatedFounded);
+
+        formdata.append('file2', faceToAnalize.buffer, { filename: faceToAnalize.originalname })
+        //formdata.append('file2', faceToAnalize);
+        const res = await axios.post('http://localhost:3000/upload', formdata, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        if(!res.data){
+          throw new Error("Failed to compare face, sorry try again")
+        }
+        if(!res.data.isEqualFaces){
+          throw new Error("Face not match")
+        }
+        const appointmentConfigurationCreated = await this.prisma.appointment.create({
+          data:appointmentEntity
+        })
+        return appointmentConfigurationCreated
+        
+     
+    
     } catch (error) {
-      return error.message
+     throw new Error(error.message)
     }
   }
 }

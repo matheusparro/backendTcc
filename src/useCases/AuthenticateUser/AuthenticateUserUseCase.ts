@@ -22,7 +22,7 @@ export class AuthenticateUserUseCase {
     const generateRefreshToken = new GenerateRefreshToken()
     
     const refreshToken = await generateRefreshToken.execute(userFind.id)
-    return {token,refreshToken}
+    return {token,refreshToken,userFind}
   }
 
 

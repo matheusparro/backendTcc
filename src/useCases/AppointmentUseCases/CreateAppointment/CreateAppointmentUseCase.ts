@@ -15,6 +15,7 @@ export class CreateAppointmentUseCase {
     if (!appointmentCreated){
       throw new Error('Appointment not created.');
     }
+    return appointmentCreated 
 
   }
 }
