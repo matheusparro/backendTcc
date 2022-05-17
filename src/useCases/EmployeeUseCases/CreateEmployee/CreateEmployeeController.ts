@@ -13,9 +13,9 @@ export class CreateEmployeeController {
   
     try {
       const employeeCreated = new EmployeeEntity({
-       appointmentConfigurationId,
+       appointmentConfigurationId:parseInt(appointmentConfigurationId),
        cpf,
-       departmentId,
+       departmentId:parseInt(departmentId),
        name,
        pis
       })
