@@ -8,14 +8,16 @@ export class PostgresCompaniesRepository implements IEmployeeRepository {
   async save(employee: EmployeeEntity,userId): Promise<EmployeeEntity> {
     try {
        const result = await this.prisma.$transaction(async (prisma: PrismaClient) => {
-          const employeeCreated = await prisma.employee.create({
+         let  employeeCreated = null 
+         
+           employeeCreated = await prisma.employee.create({
             data:employee
           })
-
+        
           const userUpdated = await prisma.user.update({
             where:{id:userId},
             data:{
-              employeeId:employeeCreated.id
+              employeeId:employeeCreated ? employeeCreated.id: null
             }
           })
           return employeeCreated

@@ -1,17 +1,15 @@
 import { Request, Response } from "express";
-import { FindCompanyUseCase } from "./FindCompanyUseCase";
+import { FindAllUserCompanyUseCase } from "./FindAllUserCompanyUseCase";
 
-export class FindCompanyController {
+export class FindAllUserCompanyController {
   constructor(
-    private findCompanyUseCase: FindCompanyUseCase,
+    private findAllUserCompanyUseCase: FindAllUserCompanyUseCase,
   ) { }
 
   async handle(request: Request, response: Response): Promise<Response> {
     const {companyId} = request.params
-    
-
     try {
-      const companyFounded = await this.findCompanyUseCase.execute(parseInt(companyId))
+      const companyFounded = await this.findAllUserCompanyUseCase.execute(parseInt(companyId))
 
       return response.status(201).json(companyFounded);
     } catch (err) {

@@ -7,7 +7,7 @@ export class FindAllDepartmentController {
   ) {}
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { companyId } = request.body;
+    const { companyId } = request.params;
     if(!companyId) return response.status(404).send("Empresa inválida")
     try {
       const departmentsFounded = await this.findAllDepartmentUseCase.execute(parseInt(companyId))

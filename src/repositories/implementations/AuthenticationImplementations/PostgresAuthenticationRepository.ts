@@ -5,7 +5,12 @@ import { IAuthenticationRepository } from "./IAuthenticationRepository";
 export class PostgresAuthenticationRepository implements IAuthenticationRepository {
   async findToLogin(email: string, password: string): Promise<UserEntity> {
     const userAlreadyExists = await client.user.findFirst({
-      where:{email}
+      where:{email},
+      include:{
+        permissions:true,
+        employee:true,
+        refreshToken:true,
+      }
     })
     
     if (!userAlreadyExists){

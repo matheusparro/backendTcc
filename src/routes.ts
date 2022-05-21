@@ -19,6 +19,7 @@ import { is } from "./middleware/validatePermissions";
 import { deleteUserController } from "./useCases/UserUseCases/DeleteUser";
 import { createAppointmentController } from "./useCases/AppointmentUseCases/CreateAppointment";
 import { findAllDepartmentController } from "./useCases/DepartmentUseCases/FindAllDepartment.ts";
+import { findAllUserCompanyController } from "./useCases/UserUseCases/FindAllUserCompany";
 
 const router = Router()
 
@@ -44,12 +45,15 @@ router.post('/users', multer(uploadAvatar.getConfig).single("userAvatar"), ensur
   return createUserController.handle(request, response);
 });
 
-router.get('/users/:id', (request, response) => {
+router.get('/users/:id', (request, response) => { //////////////////////// FIND ONE BY ID
   return findUserController.handle(request, response);
 });
 
-router.delete('/users/:userId', (request, response) => {
+router.delete('/users/:userId', (request, response) => { ////////////////////// DELETE BY ID
   return deleteUserController.handle(request, response);
+});
+router.get('/company/:companyId/users/', (request, response) => { //////////////////////// FIND ALL USER BY COMPANY
+  return findAllUserCompanyController.handle(request, response);
 });
 
 
@@ -95,7 +99,7 @@ router.post('/appointment',multer().single("faceToAnalize"), (request, response)
   return createAppointmentController.handle(request, response);
 });
 
-router.get('/department/all', (request, response) => {
+router.get('/company/:companyId/department/all', (request, response) => {
   
   return findAllDepartmentController.handle(request, response);
 });
