@@ -2,12 +2,12 @@ import { IUsersRepository } from "./IUsersRepository";
 import { UserEntity } from "../../../entities/User";
 import { PrismaClient } from "@prisma/client";
 import { client } from "../../../prisma/client";
-import { Axios } from 'axios'
+import Axios from 'axios'
 
 export class PostgresUsersRepository implements IUsersRepository {
   constructor(
     private prisma = new PrismaClient(),
-    private axios = new Axios()
+    
   ) { }
   async findAll(companyId: number): Promise<UserEntity[]> {
     try {

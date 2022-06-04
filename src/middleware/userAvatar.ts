@@ -94,7 +94,8 @@ class UploadAvatar {
           "image/jpeg",
           "image/pjpeg",
           "image/png",
-          "image/gif"
+          "image/gif",
+          "image/jpg"
         ];
     
         if (allowedMimes.includes(file.mimetype)) {

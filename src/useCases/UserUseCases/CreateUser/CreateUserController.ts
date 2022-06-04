@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import { Request, Response } from "express";
 import { UserEntity } from "../../../entities/User";
 import { CreateUserUseCase } from "./CreateUserUseCase";
@@ -15,7 +16,7 @@ export class CreateUserController {
         Avatar:request.file ?request.file.path :null,
         companyId:parseInt(companyId),
         email,
-        password,
+        password:await hash(password,8),
         employeeId,
         permissionsID:null,
       })
