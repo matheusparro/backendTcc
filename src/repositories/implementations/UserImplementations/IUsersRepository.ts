@@ -3,6 +3,7 @@ import { UserEntity } from "../../../entities/User";
 export interface IUsersRepository {
   findByEmail(email: string): Promise<UserEntity>;
   save(user: UserEntity): Promise<UserEntity>;
+  update(id:number,email:string,avatar:string,permissionsID:number): Promise<UserEntity>;
   deleteUser(id:number):Promise<UserEntity>;
   findUser(id:number): Promise<UserEntity>;
   findAll(companyId:number): Promise<UserEntity[]>;

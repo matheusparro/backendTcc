@@ -8,12 +8,12 @@ export class CreateAppointmentConfigurationController {
   ) { }
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { startTime, startTimeEnd, endTime, endTimeEnd } = request.body;
+    const { startTime, startTimeEnd, endTime, endTimeEnd,name } = request.body;
     const { companyId } = request.body
 
     try {
       const appointmentConfigurationEntityCreated = new AppointmentConfigurationEntity({
-        
+        name,
         endTime:new Date(endTime),
         endTimeEnd:new Date(endTimeEnd),
         startTime:new Date(startTime),

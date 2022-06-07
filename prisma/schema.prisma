@@ -90,6 +90,7 @@ model Permissions {
 
 model AppointmentConfiguration {
   id Int      @id @default(autoincrement())
+  name String
   startTime  DateTime
   startTimeEnd  DateTime
   endTime DateTime

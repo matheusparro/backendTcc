@@ -20,6 +20,8 @@ import { deleteUserController } from "./useCases/UserUseCases/DeleteUser";
 import { createAppointmentController } from "./useCases/AppointmentUseCases/CreateAppointment";
 import { findAllDepartmentController } from "./useCases/DepartmentUseCases/FindAllDepartment.ts";
 import { findAllUserCompanyController } from "./useCases/UserUseCases/FindAllUserCompany";
+import { updateUserController } from "./useCases/UserUseCases/UpdateUser";
+import { findAllAppointmentConfigurationController } from "./useCases/AppointmentConfigurationUseCases/FindAllAppointmentConfiguration copy";
 
 const router = Router()
 
@@ -43,6 +45,10 @@ router.post('/teste', multer().single("testeImagem"), (req, res) => {
 
 router.post('/users', multer(uploadAvatar.getConfig).single("userAvatar"), ensureAuthenticated, is(['manager', 'admin']), (request, response) => {
   return createUserController.handle(request, response);
+});
+
+router.put('/users/:id', multer(uploadAvatar.getConfig).single("userAvatar"), ensureAuthenticated, is(['manager', 'admin']), (request, response) => {
+  return updateUserController.handle(request, response);
 });
 
 router.get('/users/:id', (request, response) => { //////////////////////// FIND ONE BY ID
@@ -102,6 +108,11 @@ router.post('/appointment',multer().single("faceToAnalize"), (request, response)
 router.get('/company/:companyId/department/all', (request, response) => {
   
   return findAllDepartmentController.handle(request, response);
+});
+
+router.get('/company/:companyId/appointment-configuration/all', (request, response) => {
+  
+  return findAllAppointmentConfigurationController.handle(request, response);
 });
 
 export { router }

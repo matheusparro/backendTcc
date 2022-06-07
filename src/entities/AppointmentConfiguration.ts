@@ -6,6 +6,7 @@ export class AppointmentConfigurationEntity implements AppointmentConfiguration{
     Object.assign(this,props);
   }
   id: number;
+  name:string;
   startTime: Date;
   startTimeEnd: Date;
   endTime: Date;

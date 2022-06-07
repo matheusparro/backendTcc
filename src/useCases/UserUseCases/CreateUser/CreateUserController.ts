@@ -9,7 +9,7 @@ export class CreateUserController {
   ) {}
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const {email, password, companyId,employeeId} = request.body;
+    const {email, password, companyId,employeeId,permissionsID} = request.body;
 
     try {
       const userCreate = new UserEntity({
@@ -18,7 +18,7 @@ export class CreateUserController {
         email,
         password:await hash(password,8),
         employeeId,
-        permissionsID:null,
+        permissionsID:permissionsID ? permissionsID: null,
       })
       await this.createUserUseCase.execute(userCreate)
   

@@ -113,6 +113,28 @@ export class PostgresUsersRepository implements IUsersRepository {
     
   }
 
+  async update(id:number,email:string,avatar:string,permissionsID:number): Promise<UserEntity> {
+ 
+    try {
+    
+     const userUpdated= await this.prisma.user.update({
+       where:{
+          id:id
+        },
+       data:{
+         email:email,
+         Avatar:avatar,
+         permissionsID:permissionsID
+       }
+     })
+    
+     return userUpdated
+   } catch (error) {
+     throw new Error(error.message);
+   }
+   
+ }
+
   async deleteUser(id: number): Promise<UserEntity> {
     try{
       const user = await client.user.delete({

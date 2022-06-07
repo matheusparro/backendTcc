@@ -6,6 +6,15 @@ export class PostgresAppointmentConfigurationRepository implements IAppointmentC
   constructor(
     private prisma = new PrismaClient(),
   ) { }
+
+  async findAll(companyId: number): Promise<AppointmentConfigurationEntity[]> {
+    const appointmentsConfigurationFounded =  await this.prisma.appointmentConfiguration.findMany({
+      where:{
+        companyId
+      }
+    })
+    return appointmentsConfigurationFounded
+  }
   async save(appointmentConfigurationEntity: AppointmentConfigurationEntity): Promise<AppointmentConfigurationEntity> {
     try {
       const appointmentConfigurationCreated = await this.prisma.appointmentConfiguration.create({
