@@ -21,8 +21,11 @@ import { createAppointmentController } from "./useCases/AppointmentUseCases/Crea
 import { findAllDepartmentController } from "./useCases/DepartmentUseCases/FindAllDepartment.ts";
 import { findAllUserCompanyController } from "./useCases/UserUseCases/FindAllUserCompany";
 import { updateUserController } from "./useCases/UserUseCases/UpdateUser";
-import { findAllAppointmentConfigurationController } from "./useCases/AppointmentConfigurationUseCases/FindAllAppointmentConfiguration copy";
-
+import { findAllAppointmentConfigurationController } from "./useCases/AppointmentConfigurationUseCases/FindAllAppointmentConfiguration";
+import { findEmployeeController } from "./useCases/EmployeeUseCases/FindEmployee";
+import { updateAppointmentConfigurationController } from "./useCases/AppointmentConfigurationUseCases/UpdateAppointmentConfiguration";
+import { updateDepartmentController } from "./useCases/DepartmentUseCases/UpdateDeparment";
+import { updateEmployeeController } from "./useCases/EmployeeUseCases/UpdateEmployee";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -95,10 +98,11 @@ router.post('/company/:companyId/department', ensureAuthenticated, is(['manager'
 router.post('/employee', (request, response) => {
   return createEmployeeController.handle(request, response);
 });
-
-router.post('/appointment-configuration', (request, response) => {
-  return createAppointmentConfigurationController.handle(request, response);
+router.get('/employee/:id', (request, response) => {
+  return findEmployeeController.handle(request, response);
 });
+
+
 
 router.post('/appointment',multer().single("faceToAnalize"), (request, response) => {
   
@@ -114,5 +118,25 @@ router.get('/company/:companyId/appointment-configuration/all', (request, respon
   
   return findAllAppointmentConfigurationController.handle(request, response);
 });
+router.get('/company/:companyId/appointment-configuration/all', (request, response) => {
+  
+  return findAllAppointmentConfigurationController.handle(request, response);
+});
 
+router.post('/appointment-configuration', (request, response) => {
+  return createAppointmentConfigurationController.handle(request, response);
+});
+
+router.patch('/appointment-configuration/:id', (request, response) => {
+  return updateAppointmentConfigurationController.handle(request, response);
+});
+
+router.patch('/department/:id', (request, response) => {
+  
+  return updateDepartmentController.handle(request, response);
+});
+
+router.put('/employee/:id', (request, response) => {
+  return updateEmployeeController.handle(request, response);
+});
 export { router }

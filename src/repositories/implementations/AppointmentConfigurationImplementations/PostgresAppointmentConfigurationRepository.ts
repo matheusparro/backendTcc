@@ -2,6 +2,7 @@ import { EmployeeEntity } from "../../../entities/Employee";
 import { IAppointmentConfigurationRepository } from "./IAppointmentConfigurationRepository";
 import { PrismaClient } from "@prisma/client";
 import { AppointmentConfigurationEntity } from "../../../entities/AppointmentConfiguration";
+import { IAppointmentConfigurationUpdate } from "../../../useCases/AppointmentConfigurationUseCases/interface";
 export class PostgresAppointmentConfigurationRepository implements IAppointmentConfigurationRepository {
   constructor(
     private prisma = new PrismaClient(),
@@ -26,6 +27,26 @@ export class PostgresAppointmentConfigurationRepository implements IAppointmentC
     }
    
   }
+
+  async update(id:number,data:IAppointmentConfigurationUpdate): Promise<AppointmentConfigurationEntity> {
+    try {
+      const appointmentConfUpdated= await this.prisma.appointmentConfiguration.update({
+        where:{
+          id
+        },
+        data:{
+          endTime:data.endTime,
+          endTimeEnd:data.endTimeEnd,
+          name: data.name,
+          startTime: data.startTime,
+          startTimeEnd: data.startTimeEnd,      
+        }
+      })
+
+      return appointmentConfUpdated
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  } 
+
 }
-
-

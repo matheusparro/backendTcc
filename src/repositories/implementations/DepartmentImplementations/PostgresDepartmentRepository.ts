@@ -3,6 +3,19 @@ import { client } from "../../../prisma/client";
 import { IDepartmentRepository } from "./IDepartmentRepository";
 
 export class PostgresDepartmentRepository implements IDepartmentRepository {
+
+  async update(id:number,name:string): Promise<DepartmentEntity> {
+   const departmentUpdated = await client.department.update({
+     where:{
+       id
+     },
+     data:{
+       name
+     }
+   })
+   return departmentUpdated
+  }
+
   async findAll(companyId: number): Promise<DepartmentEntity[]> {
     const departmentsFounded =  await client.department.findMany({
       where:{

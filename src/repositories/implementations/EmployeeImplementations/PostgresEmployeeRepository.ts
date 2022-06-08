@@ -5,6 +5,22 @@ export class PostgresCompaniesRepository implements IEmployeeRepository {
   constructor(
     private prisma = new PrismaClient(),
   ) { }
+
+  async update(data: EmployeeEntity, id: number): Promise<EmployeeEntity> {
+    try {
+      const result = await this.prisma.employee.update({
+        where:{
+          id
+        },
+        data:data
+
+      })
+     return result
+   }catch (err) {
+     throw new Error(err);
+   }
+  }
+
   async save(employee: EmployeeEntity,userId): Promise<EmployeeEntity> {
     try {
        const result = await this.prisma.$transaction(async (prisma: PrismaClient) => {
@@ -27,6 +43,17 @@ export class PostgresCompaniesRepository implements IEmployeeRepository {
       throw new Error(err);
     }
   }
+
+  async findEmployee(id:number){
+    const employee = await this.prisma.employee.findUnique({
+      where: {
+       id
+      }, 
+    })
+    
+    return employee;
+  }
+
   
 }
 
