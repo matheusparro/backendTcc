@@ -5,10 +5,13 @@ export class AppointmentEntity implements Appointment{
   constructor(props: Omit<Appointment,'id'|'createdAt'|'updatedAt' >) {
     Object.assign(this,props);
   }
+  appointmentDate: Date;
+  id: number;
   appointmentTime: Date;
-    id: number;
-    employeeId: number;
-    createdAt: Date;
-    updatedAt: Date;
+  appointmentTimeEnd: Date;
+  employeeId: number;
+  createdAt: Date;
+  updatedAt: Date;
+
 
 }

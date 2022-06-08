@@ -43,6 +43,25 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
         if(!res.data.isEqualFaces){
           throw new Error("Face not match")
         }
+        const appointmentOpen = await this.prisma.appointment.findFirst({
+          where:{
+              appointmentTimeEnd:null,
+              appointmentDate: new Date(appointmentEntity.appointmentDate)
+          }
+          
+        })
+        if (appointmentOpen){
+          const appointmentClosed = await this.prisma.appointment.update({
+            where:{
+              id:appointmentOpen.id
+            },
+            data:{
+              appointmentTimeEnd:new Date(appointmentEntity.appointmentTime)
+            }
+          })
+          return appointmentClosed
+        }
+        appointmentEntity.appointmentTimeEnd= undefined
         const appointmentConfigurationCreated = await this.prisma.appointment.create({
           data:appointmentEntity
         })

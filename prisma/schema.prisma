@@ -105,6 +105,8 @@ model AppointmentConfiguration {
 model Appointment {
   id Int      @id @default(autoincrement())
   appointmentTime  DateTime
+  appointmentTimeEnd DateTime?
+  appointmentDate DateTime
   employee Employee?  @relation(fields: [employeeId], references: [id])
   employeeId Int?
   createdAt DateTime @default(now())

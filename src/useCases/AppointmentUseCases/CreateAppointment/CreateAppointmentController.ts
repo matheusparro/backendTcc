@@ -11,10 +11,12 @@ export class CreateAppointmentController {
    
     const {
     employeeId,
-    appointmentTime} = request.body
+    appointmentTime,appointmentDate,appointmentTimeEnd} = request.body
     const faceToAnalize = request.file
     try {
       const appointmentCreated = new AppointmentEntity({
+        appointmentDate:new Date(appointmentDate),
+        appointmentTimeEnd:new Date(appointmentTimeEnd),
        employeeId:parseInt(employeeId),
        appointmentTime:new Date(appointmentTime),
       })
