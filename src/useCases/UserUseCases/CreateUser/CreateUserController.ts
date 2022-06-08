@@ -18,7 +18,7 @@ export class CreateUserController {
         email,
         password:await hash(password,8),
         employeeId,
-        permissionsID:permissionsID ? permissionsID: null,
+        permissionsID:parseInt(permissionsID) ? parseInt(permissionsID): null,
       })
       await this.createUserUseCase.execute(userCreate)
   
