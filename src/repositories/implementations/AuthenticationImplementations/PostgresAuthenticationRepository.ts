@@ -10,6 +10,11 @@ export class PostgresAuthenticationRepository implements IAuthenticationReposito
         permissions:true,
         employee:true,
         refreshToken:true,
+        company:{
+          select:{
+            fantasyName:true
+          }
+        }
       }
     })
     

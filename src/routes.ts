@@ -118,12 +118,8 @@ router.get('/company/:companyId/appointment-configuration/all', (request, respon
   
   return findAllAppointmentConfigurationController.handle(request, response);
 });
-router.get('/company/:companyId/appointment-configuration/all', (request, response) => {
-  
-  return findAllAppointmentConfigurationController.handle(request, response);
-});
 
-router.post('/appointment-configuration', (request, response) => {
+router.post('/company/:companyId/appointment-configuration', (request, response) => {
   return createAppointmentConfigurationController.handle(request, response);
 });
 

@@ -9,7 +9,7 @@ export class CreateAppointmentConfigurationController {
 
   async handle(request: Request, response: Response): Promise<Response> {
     const { startTime, startTimeEnd, endTime, endTimeEnd,name } = request.body;
-    const { companyId } = request.body
+    const { companyId } = request.params
 
     try {
       const appointmentConfigurationEntityCreated = new AppointmentConfigurationEntity({
