@@ -9,13 +9,17 @@ export class CreateAppointmentUseCase {
   ) {}
 
   async execute(data: AppointmentEntity,faceToAnalize:Express.Multer.File) {
+    try {
+      const appointmentCreated = await this.appointmentRepository.save(data,faceToAnalize);
 
-    const appointmentCreated = await this.appointmentRepository.save(data,faceToAnalize);
-
-    if (!appointmentCreated){
-      throw new Error('Appointment not created.');
+      if (!appointmentCreated){
+        throw new Error('Appointment not created.');
+      }
+      return appointmentCreated 
+    } catch (error) {
+      throw new Error(error)
     }
-    return appointmentCreated 
-
+   
+ 
   }
 }

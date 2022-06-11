@@ -32,14 +32,19 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
 
         formdata.append('file2', faceToAnalize.buffer, { filename: faceToAnalize.originalname })
         //formdata.append('file2', faceToAnalize);
-        const res = await axios.post('http://localhost:3000/upload', formdata, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        if(!res.data){
-          throw new Error("Failed to compare face, sorry try again")
+        let res = null
+        try {
+           res = await axios.post('http://localhost:3000/upload', formdata, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          
+        } catch (error) {
+          throw new Error(res.data.error) 
         }
+       
+       
         if(!res.data.isEqualFaces){
           throw new Error("Face not match")
         }
