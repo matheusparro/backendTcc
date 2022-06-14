@@ -26,6 +26,7 @@ import { findEmployeeController } from "./useCases/EmployeeUseCases/FindEmployee
 import { updateAppointmentConfigurationController } from "./useCases/AppointmentConfigurationUseCases/UpdateAppointmentConfiguration";
 import { updateDepartmentController } from "./useCases/DepartmentUseCases/UpdateDeparment";
 import { updateEmployeeController } from "./useCases/EmployeeUseCases/UpdateEmployee";
+import { findCompTimeByMonthController } from "./useCases/CompTime/FindCompTimeByMonth.ts";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -100,6 +101,10 @@ router.post('/employee', (request, response) => {
 });
 router.get('/employee/:id', (request, response) => {
   return findEmployeeController.handle(request, response);
+});
+
+router.get('/employee/:employeeId/comp_time/year', (request, response) => {
+  return findCompTimeByMonthController.handle(request, response);
 });
 
 

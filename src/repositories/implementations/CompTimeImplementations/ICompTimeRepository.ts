@@ -2,6 +2,7 @@ import { CompTimeEntity } from "../../../entities/CompTime";
 
 export interface ICompTimeRepository  {
 
-  save(hoursWorked:number): Promise<CompTimeEntity>;
-  calculateCompTimeHours(employeeId:number):Promise<Boolean>;
+  save(extraHoursCompTime:number,hoursWorked:number,employeeId:number): Promise<CompTimeEntity>;
+  calculateCompTimeHours(employeeId:number):Promise<void>;
+calculateMonthHoursWorked(employeeId:number):Promise<any>
 }

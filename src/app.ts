@@ -8,9 +8,14 @@ const app = express()
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-cron.schedule('0 0 12 1 1/1 ? *', () => {
-  new PostgresCompTimeRepository().calculateCompTimeHours();
-});
+// cron.schedule('* * * * * *', () => {
+//   new PostgresCompTimeRepository().calculateCompTimeHours();
+// });
+
+// cron.schedule('* * * * * *', async () => {
+//    await new PostgresCompTimeRepository().calculateMonthHoursWorked(12);
+// });
+
 app.use(bodyParser.json());
 app.use(express.json())
 app.use(express.static('./upload'));
