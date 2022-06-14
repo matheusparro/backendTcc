@@ -40,6 +40,8 @@ model Employee {
   departmentId Int?
   appointmentConfiguration   AppointmentConfiguration?    @relation(fields: [appointmentConfigurationId], references: [id])
   appointmentConfigurationId Int?
+  compTime   CompTime?    @relation(fields: [compTimeId], references: [id])
+  compTimeId Int?
   user User?
   appointment Appointment[]
   createdAt DateTime @default(now())
@@ -113,6 +115,14 @@ model Appointment {
   updatedAt DateTime @updatedAt
 }
 
+model CompTime {
+  id Int      @id @default(autoincrement())
+  hoursWorked Float?
+  employer Employee?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
 
 
 
