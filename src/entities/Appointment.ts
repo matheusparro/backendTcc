@@ -2,7 +2,7 @@ import { Appointment } from '@prisma/client';
 
 export class AppointmentEntity implements Appointment{
 
-  constructor(props: Omit<Appointment,'id'|'createdAt'|'updatedAt' >) {
+  constructor(props: Omit<Appointment,'id'|'createdAt'|'updatedAt' |'status' >) {
     Object.assign(this,props);
   }
   status: number;
