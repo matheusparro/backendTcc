@@ -14,5 +14,4 @@ export class AppointmentEntity implements Appointment{
   createdAt: Date;
   updatedAt: Date;
 
-
 }
