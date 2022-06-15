@@ -27,6 +27,7 @@ import { updateAppointmentConfigurationController } from "./useCases/Appointment
 import { updateDepartmentController } from "./useCases/DepartmentUseCases/UpdateDeparment";
 import { updateEmployeeController } from "./useCases/EmployeeUseCases/UpdateEmployee";
 import { findCompTimeByMonthController } from "./useCases/CompTime/FindCompTimeByMonth.ts";
+import { findLastAppointmentByUserController } from "./useCases/AppointmentUseCases/FindLastAppointmentByUser";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -112,6 +113,11 @@ router.get('/employee/:employeeId/comp_time/year', (request, response) => {
 router.post('/appointment',multer().single("faceToAnalize"), (request, response) => {
   
   return createAppointmentController.handle(request, response);
+});
+
+router.get('/employee/:employeeId/appointment/last', (request, response) => {
+  
+  return findLastAppointmentByUserController.handle(request, response);
 });
 
 router.get('/company/:companyId/department/all', (request, response) => {

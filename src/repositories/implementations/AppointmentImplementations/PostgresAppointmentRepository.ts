@@ -6,10 +6,23 @@ import path from "path";
 import axios from 'axios'
 import  FormData  from 'form-data'
 import moment from "moment";
+import { client } from "../../../prisma/client";
 export class PostgresAppointmentRepository implements IAppointmentRepository {
   constructor(
     private prisma = new PrismaClient(),
   ) { }
+  async findLastAppointment(employeeId: number): Promise<AppointmentEntity> {
+      const userFoundByEmployee = await client.appointment.findFirst({
+        where:{
+          employeeId
+        },
+        orderBy:{
+          createdAt:'desc'
+        }
+      })
+      return userFoundByEmployee
+  }
+
 
 
 

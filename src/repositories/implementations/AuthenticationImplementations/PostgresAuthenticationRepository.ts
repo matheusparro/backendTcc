@@ -8,7 +8,11 @@ export class PostgresAuthenticationRepository implements IAuthenticationReposito
       where:{email},
       include:{
         permissions:true,
-        employee:true,
+        employee:{
+          include:{
+            department:true
+          }
+        },
         refreshToken:true,
         company:{
           select:{
