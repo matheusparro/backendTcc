@@ -11,5 +11,6 @@ export class CompTimeEntity implements CompTime{
   hoursWorked: number;
   createdAt: Date;
   updatedAt: Date;
+  missingHoursWorked: number;
 
 }

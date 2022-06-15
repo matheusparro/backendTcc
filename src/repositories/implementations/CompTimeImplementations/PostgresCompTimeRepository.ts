@@ -4,18 +4,43 @@ import { client } from "../../../prisma/client";
 import { ICompTimeRepository } from "./ICompTimeRepository";
 
 export class PostgresCompTimeRepository implements ICompTimeRepository {
-  async save(extraHoursWorked:number,hoursWorked:number,employeeId:number): Promise<CompTimeEntity> {
-
   
+  async find(employeeId: number): Promise<CompTimeEntity> {
+    const compFounded = await client.compTime.findUnique({
+      where:{
+        employeeId
+      }
+    })
+    return compFounded
+  }
+
+  async save(extraHoursWorked:number,hoursWorked:number,missingHoursWorked:number,employeeId:number): Promise<CompTimeEntity> {
     try {
-      const departmentCreated = await client.compTime.create({
-        data:{
-          employeeId,
+      const teste = await client.compTime.findUnique({ 
+        where:{employeeId}
+      })
+      if(teste && teste.id){
+        extraHoursWorked += teste.extraHoursWorked
+        hoursWorked += teste.hoursWorked
+        missingHoursWorked+= teste.missingHoursWorked
+      }
+      const compTime = await client.compTime.upsert({
+        create: {
           extraHoursWorked,
-          hoursWorked
+          hoursWorked,
+          missingHoursWorked,
+          employeeId
+        },
+        update: {
+          extraHoursWorked,
+          hoursWorked,
+          missingHoursWorked,
+        },
+        where: {
+          employeeId
         }
       })
-      return departmentCreated
+      return compTime
     } catch (error) {
       throw new Error("Falha ao criar Banco de Horas")
     }
@@ -24,11 +49,15 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
   async calculateMonthHoursWorked(employeeId:number):Promise<any>{
     const startOfMonth = moment().startOf('year').set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
     const endOfMonth = moment().endOf('year').set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
-    const compTimes = await client.compTime.findMany({
+    const appointmentsFound = await client.appointment.findMany({
       where:{
         employeeId,
 
-        createdAt:{
+        appointmentTime:{
+          gte:new Date(startOfMonth),
+          lte:new Date(endOfMonth),
+        },
+        appointmentTimeEnd:{
           gte:new Date(startOfMonth),
           lte:new Date(endOfMonth),
         },
@@ -41,20 +70,22 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
     })
 
     const yearWorked = [0,0,0,0,0,0,0,0,0,0,0,0]
-    if(compTimes){
+    if(appointmentsFound){
       let actualMonth = moment(startOfMonth).month()
       let totalMonth = 0
-      compTimes.map((itemComp)=>{
+      appointmentsFound.map((itemComp)=>{
         if(moment(itemComp.createdAt).month() != actualMonth){
           if(totalMonth > 0){
             yearWorked[actualMonth]=totalMonth
           }
           totalMonth = 0;
           actualMonth = moment(itemComp.createdAt).month()
-        
-         
         }
-        totalMonth+=itemComp.hoursWorked
+        const nowStart = moment(itemComp.appointmentTime); //todays date
+        const nowStartEnd = moment(itemComp.appointmentTimeEnd); // another date
+        const durationStart = moment.duration(nowStartEnd.diff(nowStart));
+        const difHoursStart = durationStart.asHours().toPrecision(2);
+        totalMonth+=parseInt(difHoursStart)
       })
       if(totalMonth > 0){
         yearWorked[actualMonth]=totalMonth
@@ -67,10 +98,10 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
   
   async calculateCompTimeHours(): Promise<void> {
     try {
-      const startOfMonth = moment().subtract(4,'days').set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
-      const endOfMonth = moment().subtract(4,'days').set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
-
-      const employeesFounded = await client.employee.findMany({
+      const startOfMonth = moment().subtract(0,'days').set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
+      const endOfMonth = moment().subtract(0,'days').set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
+      //00:00 ->23:59
+      let employeesFounded = await client.employee.findMany({
         include:{
           appointment:{
             where:{
@@ -78,9 +109,42 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
                 gte:new Date(startOfMonth),
                 lte:new Date(endOfMonth),
               },
-              appointmentTimeEnd:{
-                not:null
+              // appointmentTimeEnd:{
+              //   not:null
+              // }
+            }
+          },
+          appointmentConfiguration:true,
+  
+        }
+      })
+      if(employeesFounded ){
+        for (const employee of employeesFounded) {
+          if(employee.appointment.length <= 0){
+            await client.appointment.create({
+              data:{
+                appointmentDate:new Date(),
+                appointmentTime:null,
+                appointmentTimeEnd:null,
+                employeeId:employee.id,
+                
               }
+            })
+          }
+        }
+        
+      }
+       employeesFounded = await client.employee.findMany({
+        include:{
+          appointment:{
+            where:{
+              appointmentDate:{
+                gte:new Date(startOfMonth),
+                lte:new Date(endOfMonth),
+              },
+              // appointmentTimeEnd:{
+              //   not:null
+              // }
             }
           },
           appointmentConfiguration:true,
@@ -88,10 +152,9 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
         }
       })
       
-      
       if(employeesFounded ){
         for (const employee of employeesFounded) {
-          if(employee.appointment.length > 0){
+          if(employee.appointment){
             const nowStart = moment(employee.appointmentConfiguration.startTime); //todays date
             const nowStartEnd = moment(employee.appointmentConfiguration.startTimeEnd); // another date
             const durationStart = moment.duration(nowStartEnd.diff(nowStart));
@@ -104,19 +167,31 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
             const hoursWorkDay = difHoursStart+difHoursEnd
         
             //HORAS CALCULAAS DE TRABALHO NO DIA
+            let totalHoursWorkedExtra = 0
+            let totalMissingHoursWorked = 0
             let totalHoursWorked = 0
             employee.appointment.map((item)=>{
-              const nowStart = moment(item.appointmentTime); //todays date
-              const nowStartEnd = moment(item.appointmentTimeEnd); // another date
+              const nowStart = moment(item.appointmentTime ? item.appointmentTime: new Date(Date.now())); //todays date
+              const nowStartEnd = moment(item.appointmentTimeEnd ? item.appointmentTimeEnd  : item.appointmentTime ? item.appointmentTime : new Date(Date.now())) // another date
               const durationStart = moment.duration(nowStartEnd.diff(nowStart));
               const difHoursStart = durationStart.asHours();
-          
-            totalHoursWorked += difHoursStart
-          
+              
+              totalHoursWorkedExtra += difHoursStart//TODO TRABALHO NORMAL + EXTRA 
+            
+           
+              if(totalHoursWorked >=hoursWorkDay ){
+                totalHoursWorked=hoursWorkDay
+              }else{
+                if(difHoursStart > 0){
+                  totalHoursWorked +=difHoursStart
+                }
+              }
             })
-            let extraHoursWorked = totalHoursWorked - hoursWorkDay
-            let hoursWorked = totalHoursWorked
-            await this.save(extraHoursWorked,hoursWorked,employee.id)
+            let timeExtra = totalHoursWorkedExtra - hoursWorkDay 
+            let extraHoursWorked = timeExtra > 0 ? timeExtra: 0
+            let missingHoursWorked = timeExtra < 0 ? timeExtra: 0
+            let hoursWorked = totalHoursWorked //TRABALHO  NORMAL
+            await this.save(extraHoursWorked,hoursWorked,missingHoursWorked,employee.id)
           }
         }
       }

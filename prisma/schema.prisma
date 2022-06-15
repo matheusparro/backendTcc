@@ -31,6 +31,18 @@ model User {
   employeeId Int?
 }
 
+model CompTime {
+  id Int      @id @default(autoincrement())
+  hoursWorked Float?
+  extraHoursWorked Float?
+  missingHoursWorked Float?
+  employee Employee?  @relation(fields: [employeeId], references: [id])
+  employeeId Int? @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
 model Employee {
   id      Int      @id @default(autoincrement())
   name String
@@ -40,13 +52,15 @@ model Employee {
   departmentId Int?
   appointmentConfiguration   AppointmentConfiguration?    @relation(fields: [appointmentConfigurationId], references: [id])
   appointmentConfigurationId Int?
-  compTime  CompTime[]
+  compTime  CompTime?
   user User?
   appointment Appointment[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
    
 }
+
+
 
 model Company {
   id  Int      @id @default(autoincrement())
@@ -105,25 +119,16 @@ model AppointmentConfiguration {
 
 model Appointment {
   id Int      @id @default(autoincrement())
-  appointmentTime  DateTime
+  appointmentTime  DateTime?
   appointmentTimeEnd DateTime?
   appointmentDate DateTime
+  status Int?
   employee Employee?  @relation(fields: [employeeId], references: [id])
   employeeId Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model CompTime {
-  id Int      @id @default(autoincrement())
-  hoursWorked Float?
-  extraHoursWorked Float?
-  employee Employee  @relation(fields: [employeeId], references: [id])
-  employeeId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-}
 
 
 

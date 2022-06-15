@@ -3,12 +3,12 @@ import { ICompTimeRepository } from "../../../repositories/implementations/CompT
 
 export class FindCompTimeByMonthUseCase {
   constructor(
-    private departmentRepository: ICompTimeRepository,
+    private compTimeRepository: ICompTimeRepository,
   ) {}
 
   async execute(employeeId:number) {
   
-    const monthsFounded = await this.departmentRepository.calculateMonthHoursWorked(employeeId)
+    const monthsFounded = await this.compTimeRepository.calculateMonthHoursWorked(employeeId)
     if(monthsFounded) {
       return monthsFounded
     }

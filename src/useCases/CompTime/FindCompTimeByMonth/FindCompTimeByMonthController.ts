@@ -9,6 +9,7 @@ export class FindCompTimeByMonthController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { employeeId } = request.params;
     
+    
     try {
       const monthsCalc = await this.findCompTimeByMonthUseCase.execute(parseInt(employeeId))
   

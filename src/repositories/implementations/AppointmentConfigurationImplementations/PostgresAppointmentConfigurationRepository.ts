@@ -9,6 +9,7 @@ export class PostgresAppointmentConfigurationRepository implements IAppointmentC
   ) { }
 
   async findAll(companyId: number): Promise<AppointmentConfigurationEntity[]> {
+    
     const appointmentsConfigurationFounded =  await this.prisma.appointmentConfiguration.findMany({
       where:{
         companyId

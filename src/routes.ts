@@ -26,8 +26,10 @@ import { findEmployeeController } from "./useCases/EmployeeUseCases/FindEmployee
 import { updateAppointmentConfigurationController } from "./useCases/AppointmentConfigurationUseCases/UpdateAppointmentConfiguration";
 import { updateDepartmentController } from "./useCases/DepartmentUseCases/UpdateDeparment";
 import { updateEmployeeController } from "./useCases/EmployeeUseCases/UpdateEmployee";
-import { findCompTimeByMonthController } from "./useCases/CompTime/FindCompTimeByMonth.ts";
+import { findCompTimeByMonthController } from "./useCases/CompTime/FindCompTimeByMonth";
 import { findLastAppointmentByUserController } from "./useCases/AppointmentUseCases/FindLastAppointmentByUser";
+import { findAllDepartmentHoursController } from "./useCases/DepartmentUseCases/FindAllDepartmentHours";
+import { findCompTimeController } from "./useCases/CompTime/FindCompTime";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -97,6 +99,10 @@ router.post('/company/:companyId/department', ensureAuthenticated, is(['manager'
   return createDepartmentController.handle(request, response);
 });
 
+router.get('/company/:companyId/department/all/month', (request, response) => { //BUSCAR HORAS DO MES DE TODOS OS DEPARTAMENTOS
+  return findAllDepartmentHoursController.handle(request, response);
+});
+
 router.post('/employee', (request, response) => {
   return createEmployeeController.handle(request, response);
 });
@@ -106,6 +112,10 @@ router.get('/employee/:id', (request, response) => {
 
 router.get('/employee/:employeeId/comp_time/year', (request, response) => {
   return findCompTimeByMonthController.handle(request, response);
+});
+
+router.get('/employee/:employeeId/comp_time/', (request, response) => {
+  return findCompTimeController.handle(request, response);
 });
 
 

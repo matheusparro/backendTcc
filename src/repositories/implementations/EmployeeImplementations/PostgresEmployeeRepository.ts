@@ -36,7 +36,16 @@ export class PostgresCompaniesRepository implements IEmployeeRepository {
               employeeId:employeeCreated ? employeeCreated.id: null
             }
           })
+
+          const compTime = await prisma.compTime.create({
+            data:{
+              employeeId: employeeCreated.id
+            }
+          })
+          return compTime
           return employeeCreated
+
+
       })
       return result
     }catch (err) {
@@ -47,7 +56,7 @@ export class PostgresCompaniesRepository implements IEmployeeRepository {
   async findEmployee(id:number){
     const employee = await this.prisma.employee.findUnique({
       where: {
-       id
+       id,
       }, 
     })
     
