@@ -55,10 +55,10 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
 
         appointmentTime:{
           gte:new Date(startOfMonth),
-          lte:new Date(endOfMonth),
+          
         },
         appointmentTimeEnd:{
-          gte:new Date(startOfMonth),
+         
           lte:new Date(endOfMonth),
         },
         
