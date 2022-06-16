@@ -41,9 +41,9 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
         throw new Error("Employee user not found")
       } 
 
-        const image = path.join(__dirname, `../../../../${userFoundByEmployee.user.Avatar}`)
-        const fileFounded = fs.createReadStream(image)
-        const formdata = new FormData()
+        const image = await path.join(__dirname, `../../../../${userFoundByEmployee.user.Avatar}`)
+        const fileFounded = await fs.createReadStream(image)
+        const formdata = await new FormData()
         const formatedFounded = userFoundByEmployee.user.Avatar.split("\\")[1]
         formdata.append('file', fileFounded, formatedFounded);
 
