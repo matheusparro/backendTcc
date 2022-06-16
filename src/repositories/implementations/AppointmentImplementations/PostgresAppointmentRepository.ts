@@ -68,7 +68,9 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
         const appointmentOpen = await this.prisma.appointment.findFirst({
           where:{
               appointmentTimeEnd:null,
-              appointmentDate: new Date(appointmentEntity.appointmentDate)
+              NOT:{
+                appointmentTime:null,
+              }
           }
           
         })

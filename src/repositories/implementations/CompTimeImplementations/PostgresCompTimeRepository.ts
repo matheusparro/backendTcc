@@ -98,8 +98,8 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
   
   async calculateCompTimeHours(): Promise<void> {
     try {
-      const startOfMonth = moment().subtract(0,'days').set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
-      const endOfMonth = moment().subtract(0,'days').set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
+      const startOfMonth = moment().subtract(1,'days').set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
+      const endOfMonth = moment().subtract(1,'days').set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
       //00:00 ->23:59
       let employeesFounded = await client.employee.findMany({
         include:{

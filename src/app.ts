@@ -8,9 +8,9 @@ const app = express()
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-// cron.schedule('* * * * *', async () => {
-//   await new PostgresCompTimeRepository().calculateCompTimeHours();
-// });
+cron.schedule('* * * * *', async () => {
+  await new PostgresCompTimeRepository().calculateCompTimeHours();
+});
 
 // cron.schedule('* * * * * *', async () => {
 //    await new PostgresCompTimeRepository().calculateMonthHoursWorked(12);
