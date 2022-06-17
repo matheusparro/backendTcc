@@ -11,6 +11,88 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
   constructor(
     private prisma = new PrismaClient(),
   ) { }
+  async findAllFormated(employeeId: number): Promise<any> {
+    const appointmentsFounded = await client.appointment.findMany({
+      
+      
+      where:{
+        employeeId,
+
+        
+      },
+      orderBy:{
+        appointmentDate:"desc"
+      }
+      
+     
+    })
+    const appointmentConfig = await client.appointmentConfiguration.findFirst({
+      where:{
+        employer:{
+          some:{
+            id:employeeId
+          }
+        }
+      }
+    })
+
+    async function groupBy(collection, property) {
+      var i = 0, val, index,
+          values = [], result = [];
+      for (; i < collection.length; i++) {
+          val = collection[i][property];
+          index = values.indexOf(moment(val).format("YYYY-MM-DD"));
+          if (index > -1)
+              result[index].push(collection[i]);
+          else {
+
+              values.push(moment(val).format("YYYY-MM-DD"));
+              result.push([collection[i]]);
+          }
+      }
+      return result;
+  }
+  const nowStart = moment(appointmentConfig.startTime); //todays date
+  const nowStartEnd = moment(appointmentConfig.startTimeEnd); // another date
+  const durationStart = moment.duration(nowStartEnd.diff(nowStart));
+  const difHoursStart = durationStart.asHours();
+
+  const endStart = moment(appointmentConfig.endTime); //todays date
+  const endStartEnd = moment(appointmentConfig.endTimeEnd); // another date
+  const durationEnd = moment.duration(endStartEnd.diff(endStart));
+  const difHoursEnd = durationEnd.asHours();
+  const hoursWorkDay = difHoursStart+difHoursEnd
+  var obj = await groupBy(appointmentsFounded, "appointmentDate");
+
+  const formatarSituacao = obj.map(item=>{
+    let situacao = 1
+    let total = 0
+    item.map(item=>{
+      if(!item.appointmentTimeEnd){
+        situacao = 3 // INCOMPLETO
+      }
+      if(!item.appointmentTimeEnd && !item.appointmentTime){
+        situacao = 2// falta
+      }
+      const nowStart = moment(item.appointmentTime ? item.appointmentTime : new Date(Date.now()) ); //todays date
+      const nowStartEnd = moment(item.appointmentTimeEnd ? item.appointmentTimeEnd :item.appointmentTime ?item.appointmentTime : new Date(Date.now()) ); // another date
+      const durationStart = moment.duration(nowStartEnd.diff(nowStart));
+      const difHoursStart = durationStart.asHours().toPrecision(2);
+      total+=parseInt(difHoursStart)
+    })
+    if(total<hoursWorkDay && situacao !=2){
+      situacao =3
+    }
+    let objeto ={
+      data: item[0].appointmentDate,
+      appointments:item,
+      situacao,
+    }
+    return objeto
+  })
+
+    return formatarSituacao
+  }
   async findLastAppointment(employeeId: number): Promise<AppointmentEntity> {
       const userFoundByEmployee = await client.appointment.findFirst({
         where:{

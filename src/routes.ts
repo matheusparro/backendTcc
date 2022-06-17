@@ -30,6 +30,7 @@ import { findCompTimeByMonthController } from "./useCases/CompTime/FindCompTimeB
 import { findLastAppointmentByUserController } from "./useCases/AppointmentUseCases/FindLastAppointmentByUser";
 import { findAllDepartmentHoursController } from "./useCases/DepartmentUseCases/FindAllDepartmentHours";
 import { findCompTimeController } from "./useCases/CompTime/FindCompTime";
+import { findAllFormatedAppointmentByUserController } from "./useCases/AppointmentUseCases/FindAllFormatedAppointmentByUser";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -129,6 +130,12 @@ router.get('/employee/:employeeId/appointment/last', (request, response) => {
   
   return findLastAppointmentByUserController.handle(request, response);
 });
+
+router.get('/employee/:employeeId/appointment', (request, response) => {
+  
+  return findAllFormatedAppointmentByUserController.handle(request, response);
+});
+
 
 router.get('/company/:companyId/department/all', (request, response) => {
   
