@@ -31,6 +31,7 @@ import { findLastAppointmentByUserController } from "./useCases/AppointmentUseCa
 import { findAllDepartmentHoursController } from "./useCases/DepartmentUseCases/FindAllDepartmentHours";
 import { findCompTimeController } from "./useCases/CompTime/FindCompTime";
 import { findAllFormatedAppointmentByUserController } from "./useCases/AppointmentUseCases/FindAllFormatedAppointmentByUser";
+import { createAppointmentControllerteste } from "./useCases/AppointmentUseCases/CreateAppointment copy";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -119,12 +120,19 @@ router.get('/employee/:employeeId/comp_time/', (request, response) => {
   return findCompTimeController.handle(request, response);
 });
 
-
-
 router.post('/appointment',multer().single("faceToAnalize"), (request, response) => {
   
   return createAppointmentController.handle(request, response);
 });
+
+router.post('/appointment/:id', (request, response) => {
+  
+  return createAppointmentControllerteste.handle(request, response);
+});
+
+
+
+
 
 router.get('/employee/:employeeId/appointment/last', (request, response) => {
   
