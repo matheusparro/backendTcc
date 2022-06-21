@@ -102,6 +102,7 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
           createdAt:'desc'
         }
       })
+      if(userFoundByEmployee.appointmentTimeEnd)userFoundByEmployee.appointmentTime= userFoundByEmployee.appointmentTimeEnd
       return userFoundByEmployee
   }
 

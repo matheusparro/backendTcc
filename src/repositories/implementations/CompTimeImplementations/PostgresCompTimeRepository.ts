@@ -72,10 +72,10 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
     const yearWorked = [0,0,0,0,0,0,0,0,0,0,0,0]
     if(appointmentsFound){
       let actualMonth = moment(startOfMonth).month()
-      let totalMonth = 0
+      let totalMonth = 0.000000
       appointmentsFound.map((itemComp)=>{
         if(moment(itemComp.createdAt).month() != actualMonth){
-          if(totalMonth > 0){
+          if(totalMonth >= 0){
             yearWorked[actualMonth]=totalMonth
           }
           totalMonth = 0;
@@ -85,9 +85,9 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
         const nowStartEnd = moment(itemComp.appointmentTimeEnd); // another date
         const durationStart = moment.duration(nowStartEnd.diff(nowStart));
         const difHoursStart = durationStart.asHours().toPrecision(2);
-        totalMonth+=parseInt(difHoursStart)
+        totalMonth+=Number(difHoursStart)
       })
-      if(totalMonth > 0){
+      if(totalMonth >= 0){
         yearWorked[actualMonth]=totalMonth
         totalMonth = 0;
       }
@@ -98,8 +98,8 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
   
   async calculateCompTimeHours(): Promise<void> {
     try {
-      const startOfMonth = moment().subtract(1,'days').set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
-      const endOfMonth = moment().subtract(1,'days').set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
+      const startOfMonth = moment().subtract(0,'days').set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
+      const endOfMonth = moment().subtract(0,'days').set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
       //00:00 ->23:59
       let employeesFounded = await client.employee.findMany({
         include:{
@@ -120,7 +120,7 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
       })
       if(employeesFounded ){
         for (const employee of employeesFounded) {
-          if(employee.appointment.length <= 0){
+          if(!employee.appointment.length){
             await client.appointment.create({
               data:{
                 appointmentDate:new Date(),
