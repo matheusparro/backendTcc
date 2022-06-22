@@ -58,7 +58,11 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
           where: {
             id: id
           },
-          data: appointmentEntity
+          data: {
+            appointmentTime:appointmentEntity.appointmentTime,
+            appointmentTimeEnd:appointmentEntity.appointmentTimeEnd,
+
+          }
         })
    
      
@@ -81,7 +85,7 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
 
       const compTime = await client.compTime.findUnique({
         where: {
-          employeeId: appointmentEntity.employeeId
+          employeeId: appointmentsOld.employeeId
         }
       })
       compWorkTimeAdd += compTime.hoursWorked

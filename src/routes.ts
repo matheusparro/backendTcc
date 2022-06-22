@@ -125,7 +125,7 @@ router.post('/appointment',multer().single("faceToAnalize"), (request, response)
   return createAppointmentController.handle(request, response);
 });
 
-router.post('/appointment/:id', (request, response) => {
+router.put('/appointment/:id', (request, response) => {
   
   return createAppointmentControllerteste.handle(request, response);
 });
