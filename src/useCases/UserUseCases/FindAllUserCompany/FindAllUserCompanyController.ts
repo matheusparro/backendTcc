@@ -8,8 +8,9 @@ export class FindAllUserCompanyController {
 
   async handle(request: Request, response: Response): Promise<Response> {
     const {companyId} = request.params
+    const {departmentId} = request.query
     try {
-      const companyFounded = await this.findAllUserCompanyUseCase.execute(parseInt(companyId))
+      const companyFounded = await this.findAllUserCompanyUseCase.execute(parseInt(companyId),parseInt(String(departmentId)))
 
       return response.status(201).json(companyFounded);
     } catch (err) {

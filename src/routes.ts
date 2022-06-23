@@ -131,9 +131,6 @@ router.put('/appointment/:id', (request, response) => {
 });
 
 
-
-
-
 router.get('/employee/:employeeId/appointment/last', (request, response) => {
   
   return findLastAppointmentByUserController.handle(request, response);

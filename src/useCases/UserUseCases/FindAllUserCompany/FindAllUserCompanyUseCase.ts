@@ -8,13 +8,13 @@ export class FindAllUserCompanyUseCase {
     private usersRepository: IUsersRepository,
   ) {}
 
-  async execute(companyId: number) {
+  async execute(companyId: number,departmentId?:number) {
   
     const companyFound = await this.companyRepository.find(companyId)
     if (!companyFound){
       throw new Error('Company not found')
     }
-    const usersFound = await this.usersRepository.findAll(companyId)
+    const usersFound = await this.usersRepository.findAll(companyId,departmentId)
     if(!usersFound) throw new Error('Users not found')
     return usersFound
    

@@ -9,15 +9,28 @@ export class PostgresUsersRepository implements IUsersRepository {
     private prisma = new PrismaClient(),
     
   ) { }
-  async findAll(companyId: number): Promise<UserEntity[]> {
+  async findAll(companyId: number,departmentId:number): Promise<UserEntity[]> {
     try {
-      const user = await client.user.findMany({
+      const userList = await client.user.findMany({
         where: {
-         companyId
+         companyId,
+
         },
+        include:{
+          employee:{
+            
+            select:{
+              departmentId:true
+            }
+          }
+          
+        }
       })
-      
-      return user;
+      const userListFiltered = userList.filter(item => !item.employee || item.employee.departmentId ==departmentId )
+      if(departmentId){
+        return userListFiltered
+      }
+      return userList;
     } catch (error) {
       throw new Error("Cannot found users")
     }
