@@ -3,12 +3,78 @@ import { UserEntity } from "../../../entities/User";
 import { PrismaClient } from "@prisma/client";
 import { client } from "../../../prisma/client";
 import Axios from 'axios'
+import { compare,hash } from "bcrypt";
+import crypto from 'crypto'
+import nodemailer from 'nodemailer'
+import e from "express";
 
 export class PostgresUsersRepository implements IUsersRepository {
   constructor(
     private prisma = new PrismaClient(),
     
   ) { }
+  async forgotPassword(email: string) {
+    try {
+      // const transporter = nodemailer.createTransport({
+      //   host: "smtp.mailtrap.io",
+      //   port: 2525,
+      //   auth: {
+      //     user: "e163573afcc570",
+      //     pass: "7dff8575fba76f"
+      //   }
+      // });
+      const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure:true,
+        auth: {
+          user: "mathparro@gmail.com",
+          pass: "bgqwqifedwodpcyg"
+        },
+      });
+      const newPassword = crypto.randomBytes(4).toString('hex')
+      transporter.sendMail({
+        from:'Administrador <cbd524a386-0ea896@inbox.mailtrap.io>',
+        to:email,
+        subject:"ToTrabalhando - Recuperação de senha",
+        text:`Olá, sua nova senha para acessar o sistema é ${newPassword}`
+
+      }).then(async ()=>{
+        await client.user.update({
+          where:{
+            email
+          },
+          data:{
+            password: await hash(newPassword,8)
+          }
+        })
+      })
+    } catch (error) {
+      throw new Error("Não foi possivel recuperar a senha")
+    }
+  }
+  async changePassword(id: number, password: string, newPassword: string): Promise<UserEntity> {
+    const userFounded = await client.user.findFirst({
+      where:{
+        id,
+      }
+    })
+    
+   const comparedPassword = await compare(password, userFounded.password)
+    if(!comparedPassword) {
+      throw new Error("Senha antiga inválida")
+    }
+   
+    const userChanged = await client.user.update({
+      where:{
+        id,
+      },
+      data:{
+        password:await hash(newPassword,8)
+      }
+    })
+    return userChanged
+  }
   async findAll(companyId: number,departmentId:number): Promise<UserEntity[]> {
     try {
       const userList = await client.user.findMany({

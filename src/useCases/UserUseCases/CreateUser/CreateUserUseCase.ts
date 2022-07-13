@@ -12,14 +12,14 @@ export class CreateUserUseCase {
     const userAlreadyExists = await this.usersRepository.findByEmail(data.email);
 
     if (userAlreadyExists) {
-      throw new Error('E-mail alredy used.');
+      throw new Error('E-mais já esta em uso.');
     }
   
 
     const userCreated = await this.usersRepository.save(data);
 
     if (!userCreated){
-      throw new Error('User not created.');
+      throw new Error('Usuário não foi criado.');
     }
 
   }

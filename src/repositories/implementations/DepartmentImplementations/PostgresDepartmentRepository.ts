@@ -65,6 +65,9 @@ export class PostgresDepartmentRepository implements IDepartmentRepository {
             }
           })
         }
+        if(hours< 0){
+          hours=0
+        }
         objectDepartaments.push({
           id:itemDepartment.id,
           name: itemDepartment.name,

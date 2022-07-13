@@ -32,6 +32,8 @@ import { findAllDepartmentHoursController } from "./useCases/DepartmentUseCases/
 import { findCompTimeController } from "./useCases/CompTime/FindCompTime";
 import { findAllFormatedAppointmentByUserController } from "./useCases/AppointmentUseCases/FindAllFormatedAppointmentByUser";
 import { createAppointmentControllerteste } from "./useCases/AppointmentUseCases/CreateAppointment copy";
+import { changePasswordUserController } from "./useCases/UserUseCases/ChangePasswordUser";
+import { forgotPasswordController } from "./useCases/UserUseCases/ForgotPassword";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -92,6 +94,14 @@ router.get('/company/:id', ensureAuthenticated, is(['manager', 'admin']), (reque
 
 router.post('/users/permission/set-permission', ensureAuthenticated, is(['manager', 'admin']), (request, response) => {
   return setUserPermissionController.handle(request, response);
+});
+
+router.patch('/users/:id/change-password', ensureAuthenticated, (request, response) => {
+  return changePasswordUserController.handle(request, response);
+});
+
+router.post('/forgot-password', (request, response) => {
+  return forgotPasswordController.handle(request, response);
 });
 
 // router.post('/company/:companyId/department/:departmentId/set-department',ensureAuthenticated,is(['manager']),(request, response) => {

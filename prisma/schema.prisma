@@ -27,8 +27,8 @@ model User {
   companyId Int?
   permissions   Permissions?   @relation(fields: [permissionsID], references: [id])
   permissionsID Int?
-  employee Employee?  @relation(fields: [employeeId], references: [id])
-  employeeId Int?
+  employee Employee?  @relation(fields: [employeeId], references: [id]) 
+  employeeId Int? @unique
 }
 
 model CompTime {
@@ -88,7 +88,7 @@ model RefreshToken {
   id Int      @id @default(autoincrement())
   expiresIn Int
   user   User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  userId Int
+  userId Int  @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt  
 }

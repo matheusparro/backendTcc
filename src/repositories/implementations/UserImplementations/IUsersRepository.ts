@@ -8,5 +8,7 @@ export interface IUsersRepository {
   findUser(id:number): Promise<UserEntity>;
   findAll(companyId:number,departmentId?:number): Promise<UserEntity[]>;
   setUserPermission(id:number,permissionID:number,companyId:number): Promise<UserEntity>;
+  changePassword(id: number, password: string, newPassword: string):Promise<UserEntity>;
+  forgotPassword(email:string)
   // setUserDepartment(id:number,departmentId:number,companyId:number): Promise<UserEntity>;
 }
