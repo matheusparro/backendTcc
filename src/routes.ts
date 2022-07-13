@@ -75,7 +75,6 @@ router.get('/company/:companyId/users/', (request, response) => { //////////////
 
 
 router.post('/auth', (request, response) => {
-  console.log("hello")
   return authenticateUserController.handle(request, response);
 });
 
