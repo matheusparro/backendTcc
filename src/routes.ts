@@ -34,6 +34,7 @@ import { findAllFormatedAppointmentByUserController } from "./useCases/Appointme
 import { createAppointmentControllerteste } from "./useCases/AppointmentUseCases/CreateAppointment copy";
 import { changePasswordUserController } from "./useCases/UserUseCases/ChangePasswordUser";
 import { forgotPasswordController } from "./useCases/UserUseCases/ForgotPassword";
+import { findOneConfigurationController } from "./useCases/AppointmentConfigurationUseCases/FindOneAppointmentConfiguration";
 const router = Router()
 
 router.post('/teste', multer().single("testeImagem"), (req, res) => {
@@ -168,6 +169,10 @@ router.post('/company/:companyId/appointment-configuration', (request, response)
 router.patch('/appointment-configuration/:id', (request, response) => {
   return updateAppointmentConfigurationController.handle(request, response);
 });
+router.get('/appointment-configuration/:id', (request, response) => {
+  return findOneConfigurationController.handle(request, response);
+});
+
 
 router.patch('/department/:id', (request, response) => {
   

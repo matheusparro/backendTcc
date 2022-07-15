@@ -7,6 +7,18 @@ export class PostgresAppointmentConfigurationRepository implements IAppointmentC
   constructor(
     private prisma = new PrismaClient(),
   ) { }
+  async findOne(id: number): Promise<AppointmentConfigurationEntity> {
+    try {
+      const apConf = await this.prisma.appointmentConfiguration.findUnique({
+        where:{
+          id
+        }
+      })
+      return apConf
+    }catch(error){
+      throw error
+    }
+  }
 
   async findAll(companyId: number): Promise<AppointmentConfigurationEntity[]> {
     

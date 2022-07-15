@@ -4,4 +4,5 @@ export interface IAppointmentConfigurationRepository  {
   save(appointmentConfigurationEntity: AppointmentConfigurationEntity): Promise<AppointmentConfigurationEntity>;
   findAll(companyId: number): Promise<AppointmentConfigurationEntity[]>;
   update( id:number,data:IAppointmentConfigurationUpdate):Promise<AppointmentConfigurationEntity>;
+  findOne(id:number,):Promise<AppointmentConfigurationEntity>;
 }

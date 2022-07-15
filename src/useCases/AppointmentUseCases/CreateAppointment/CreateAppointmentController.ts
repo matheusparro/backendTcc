@@ -11,7 +11,7 @@ export class CreateAppointmentController {
    
     const {
     employeeId,
-    appointmentTime} = request.body
+    appointmentTime,reason} = request.body
     const faceToAnalize = request.file
     try {
       const appointmentCreated = new AppointmentEntity({
@@ -19,6 +19,7 @@ export class CreateAppointmentController {
         appointmentTimeEnd:new Date(appointmentTime),
        employeeId:parseInt(employeeId),
        appointmentTime:new Date(appointmentTime),
+       reason:reason ? reason: null
       })
       const appointment = await this.createAppointmentUseCase.execute(appointmentCreated,faceToAnalize)
       return response.status(201).send(appointment);  

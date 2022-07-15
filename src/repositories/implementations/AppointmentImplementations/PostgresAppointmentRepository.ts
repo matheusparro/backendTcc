@@ -12,11 +12,11 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
     private prisma = new PrismaClient(),
   ) { }
 
-  async updateAppointmentCompTime(id:number,appointmentEntity: AppointmentEntity): Promise<AppointmentEntity> {
+  async updateAppointmentCompTime(id: number, appointmentEntity: AppointmentEntity): Promise<AppointmentEntity> {
     const appointmentsOld = await client.appointment.findUnique({
 
       where: {
-        id:id,
+        id: id,
 
       },
       include: {
@@ -54,18 +54,18 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
       let oldMissingWorkTime = oldTimeExtra < 0 ? oldTimeExtra : 0
 
 
-        const appointmentUpdated = await this.prisma.appointment.update({
-          where: {
-            id: id
-          },
-          data: {
-            appointmentTime:appointmentEntity.appointmentTime,
-            appointmentTimeEnd:appointmentEntity.appointmentTimeEnd,
+      const appointmentUpdated = await this.prisma.appointment.update({
+        where: {
+          id: id
+        },
+        data: {
+          appointmentTime: appointmentEntity.appointmentTime,
+          appointmentTimeEnd: appointmentEntity.appointmentTimeEnd,
 
-          }
-        })
-   
-     
+        }
+      })
+
+
 
       const nowStartAp = moment(appointmentUpdated.appointmentTime ? appointmentUpdated.appointmentTime : new Date(Date.now())); //todays date
       const nowStartEndAp = moment(appointmentUpdated.appointmentTimeEnd ? appointmentUpdated.appointmentTimeEnd : appointmentUpdated.appointmentTime ? appointmentUpdated.appointmentTime : new Date(Date.now())) // another date
@@ -91,19 +91,21 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
       compWorkTimeAdd += compTime.hoursWorked
       compExtraTimeAdd += compTime.extraHoursWorked
       compMissingTimeAdd += compTime.missingHoursWorked
-      if(compTime){
-      await client.compTime.update({
-        where:{
-          id:compTime.id,
-        },
-        data:{
-          extraHoursWorked:compExtraTimeAdd,
-          hoursWorked:compWorkTimeAdd,
-          missingHoursWorked:compMissingTimeAdd
+      if (compTime) {
+        if (appointmentEntity.appointmentTimeEnd) {
+          await client.compTime.update({
+            where: {
+              id: compTime.id,
+            },
+            data: {
+              extraHoursWorked: compExtraTimeAdd,
+              hoursWorked: compWorkTimeAdd,
+              missingHoursWorked: compMissingTimeAdd
+            }
+          })
+          return appointmentUpdated
         }
-      })
-      return appointmentUpdated
-     }
+      }
     }
     const appointmentUpdated = await this.prisma.appointment.update({
       where: {
@@ -265,7 +267,8 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
             id: appointmentOpen.id
           },
           data: {
-            appointmentTimeEnd: new Date(appointmentEntity.appointmentTime)
+            appointmentTimeEnd: new Date(appointmentEntity.appointmentTime),
+            reason: appointmentEntity.reason
           }
         })
         return appointmentClosed

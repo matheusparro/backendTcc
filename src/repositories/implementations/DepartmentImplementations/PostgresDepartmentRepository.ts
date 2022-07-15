@@ -10,23 +10,6 @@ export class PostgresDepartmentRepository implements IDepartmentRepository {
     const departmentsFounded =  await client.department.findMany({
       where:{
         companyId,
-        //id: id?id:undefined,
-        // employer:{
-        //   some:{
-        //     appointment:{
-        //       some:{
-        //         appointmentTime:{
-        //           gte:new Date(startOfMonth),
-        //           lte:new Date(endOfMonth),
-        //         },
-        //         appointmentTimeEnd:{
-        //           gte:new Date(startOfMonth),
-        //           lte:new Date(endOfMonth),
-        //         },
-        //       }
-        //     }
-        //   }
-        // }
       },
       include:{
         employer:{

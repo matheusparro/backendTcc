@@ -123,6 +123,7 @@ model Appointment {
   appointmentTimeEnd DateTime?
   appointmentDate DateTime
   status Int?
+  reason String?
   employee Employee?  @relation(fields: [employeeId], references: [id])
   employeeId Int?
   createdAt DateTime @default(now())
