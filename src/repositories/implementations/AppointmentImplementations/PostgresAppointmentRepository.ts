@@ -115,14 +115,22 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
     })
     return appointmentUpdated
   }
-  async findAllFormated(employeeId: number): Promise<any> {
+  async findAllFormated(employeeId: number,firstDate:string,lastDate:string): Promise<any> {
+    const firstDateFormated = moment(firstDate).set({hour:0,minute:0,second:0,millisecond:0}).format('YYYY-MM-DD HH:mm:ss');
+    const lastDateFormated = moment(lastDate).set({hour:23,minute:59,second:59,millisecond:59}).format('YYYY-MM-DD HH:mm:ss');
     const appointmentsFounded = await client.appointment.findMany({
-
+      
 
       where: {
         employeeId,
+        createdAt:{
+          lte: lastDate ? new Date(lastDateFormated):undefined  ,
+          gte:  firstDate ? new Date(firstDateFormated):undefined  ,
+        },
 
-
+      },
+      include:{
+        employee:true
       },
       orderBy: {
         appointmentDate: "desc"
@@ -191,6 +199,7 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
         data: item[0].appointmentDate,
         appointments: item,
         situacao,
+        name:item[0].employee.name
       }
       return objeto
     })
