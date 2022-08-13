@@ -42,8 +42,8 @@ export class PostgresDepartmentRepository implements IDepartmentRepository {
                 const nowStart = moment(itemAppointment.appointmentTime); //todays date
                 const nowStartEnd = moment(itemAppointment.appointmentTimeEnd); // another date
                 const durationStart = moment.duration(nowStartEnd.diff(nowStart));
-                const difHoursStart = durationStart.asHours().toPrecision(2);
-                hours+=parseInt(difHoursStart)
+                const difHoursStart = durationStart.asHours();
+                hours+=difHoursStart
               })
             }
           })

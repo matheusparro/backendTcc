@@ -189,8 +189,8 @@ export class PostgresAppointmentRepository implements IAppointmentRepository {
         const nowStart = moment(item.appointmentTime ? item.appointmentTime : new Date(Date.now())); //todays date
         const nowStartEnd = moment(item.appointmentTimeEnd ? item.appointmentTimeEnd : item.appointmentTime ? item.appointmentTime : new Date(Date.now())); // another date
         const durationStart = moment.duration(nowStartEnd.diff(nowStart));
-        const difHoursStart = durationStart.asHours().toPrecision(2);
-        total += parseInt(difHoursStart)
+        const difHoursStart = durationStart.asHours();
+        total += difHoursStart
       })
       if (total < hoursWorkDay && situacao != 2) {
         situacao = 3

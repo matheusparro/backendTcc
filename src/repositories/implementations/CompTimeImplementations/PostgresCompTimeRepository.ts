@@ -84,7 +84,7 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
         const nowStart = moment(itemComp.appointmentTime); //todays date
         const nowStartEnd = moment(itemComp.appointmentTimeEnd); // another date
         const durationStart = moment.duration(nowStartEnd.diff(nowStart));
-        const difHoursStart = durationStart.asHours().toPrecision(2);
+        const difHoursStart = durationStart.asHours().toPrecision(4);
         totalMonth+=Number(difHoursStart)
       })
       if(totalMonth >= 0){
@@ -155,13 +155,13 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
       if(employeesFounded ){
         for (const employee of employeesFounded) {
           if(employee.appointment){
-            const nowStart = moment(employee.appointmentConfiguration.startTime); //todays date
-            const nowStartEnd = moment(employee.appointmentConfiguration.startTimeEnd); // another date
+            const nowStart = moment(employee.appointmentConfiguration.startTime,'HH:mm:ss a'); //todays date
+            const nowStartEnd = moment(employee.appointmentConfiguration.startTimeEnd,'HH:mm:ss a'); // another date
             const durationStart = moment.duration(nowStartEnd.diff(nowStart));
             const difHoursStart = durationStart.asHours();
         
-            const endStart = moment(employee.appointmentConfiguration.endTime); //todays date
-            const endStartEnd = moment(employee.appointmentConfiguration.endTimeEnd); // another date
+            const endStart = moment(employee.appointmentConfiguration.endTime,'HH:mm:ss a'); //todays date
+            const endStartEnd = moment(employee.appointmentConfiguration.endTimeEnd,'HH:mm:ss a'); // another date
             const durationEnd = moment.duration(endStartEnd.diff(endStart));
             const difHoursEnd = durationEnd.asHours();
             const hoursWorkDay = difHoursStart+difHoursEnd
@@ -171,8 +171,8 @@ export class PostgresCompTimeRepository implements ICompTimeRepository {
             let totalMissingHoursWorked = 0
             let totalHoursWorked = 0
             employee.appointment.map((item)=>{
-              const nowStart = moment(item.appointmentTime ? item.appointmentTime: new Date(Date.now())); //todays date
-              const nowStartEnd = moment(item.appointmentTimeEnd ? item.appointmentTimeEnd  : item.appointmentTime ? item.appointmentTime : new Date(Date.now())) // another date
+              const nowStart = moment(item.appointmentTime ? item.appointmentTime: new Date(Date.now()),'HH:mm:ss a'); //todays date
+              const nowStartEnd = moment(item.appointmentTimeEnd ? item.appointmentTimeEnd  : item.appointmentTime ? item.appointmentTime : new Date(Date.now()),'HH:mm:ss a') // another date
               const durationStart = moment.duration(nowStartEnd.diff(nowStart));
               const difHoursStart = durationStart.asHours();
               

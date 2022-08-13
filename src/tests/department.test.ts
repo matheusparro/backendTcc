@@ -20,33 +20,3 @@ it("Create Deparment", async () => {
   expect(company.cnpj).toBeTruthy();
 });
 
-it("Find Deparment", async () => {
-  // ACT
-  const company = await client.company.create({
-    data: {
-      cnpj:"teste",
-      fantasyName:"teste",
-
-    },
-  });
-
-  // ASSERT
-  expect(company.cnpj).toBeTruthy();
-});
-
-
-
-it("Delete Deparment", async () => {
-  // ACT
-  const company = await client.company.create({
-    data: {
-      cnpj:"teste",
-      fantasyName:"teste",
-
-    },
-  });
-
-  // ASSERT
-  expect(company.cnpj).toBeTruthy();
-});
-
